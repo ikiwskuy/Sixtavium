@@ -225,16 +225,24 @@
     .watch-head{ padding-bottom:12px; }
     .watch-head h3{ font-size:18px; }
     .ep-nav{ padding:0 12px; }
-    .ep-nav .ep-nav-lbl{ display:none; }
+    /* Tombol prev/next halaman nonton di HP: label teks ikut tampil seperti di PC */
+    .watch-bar .ep-nav{ padding:0 15px; font-size:14px; white-space:nowrap; }
+    .watch-bar .ep-nav .ep-nav-lbl{ display:inline; }
   }
   .modal-body{ padding:22px 24px 26px; }
   .modal-body .m-top{ display:flex; gap:18px; }
   .modal-body .m-poster{ width:104px; height:156px; border-radius:12px; flex:none; position:relative; overflow:hidden; background:var(--panel-2); }
   .modal-body .m-poster img{ width:100%; height:100%; object-fit:cover; }
   .modal-body h2{ font-family:"Marcellus", Georgia, serif; margin:2px 0 6px; font-size:27px; font-weight:400; letter-spacing:.01em; }
-  .m-meta{ display:flex; flex-wrap:wrap; gap:8px 14px; color:var(--muted); font-size:13px; font-weight:600; align-items:center; }
-  .m-meta .rating{ color:var(--text); font-weight:800; }
-  .m-meta .rating .star{ color:var(--pink); }
+  /* Baris info detail 3 tingkat: badge penting → spesifikasi redup → chip genre seragam */
+  .m-meta{ margin-top:2px; }
+  .m-badges{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+  .m-badge{ display:inline-flex; align-items:center; gap:5px; border:1px solid var(--line); background:var(--panel-2); border-radius:999px; padding:5px 12px; font-size:12.5px; font-weight:700; color:var(--text); line-height:1.3; }
+  .m-badge.rating{ border-color:var(--accent); background:rgba(177,131,230,.16); font-weight:800; }
+  .m-badge.rating .star{ color:var(--pink); }
+  .m-spec{ margin:10px 0 0; color:var(--muted); font-size:12.5px; font-weight:600; line-height:1.5; }
+  .m-genres{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .m-genres .genre-pill{ padding:5px 13px; font-size:12.5px; font-weight:600; }
   .card .rating-line{ margin:2px 0 0; font-size:12.5px; color:var(--muted); display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
   .card .rating-line .star{ color:var(--pink); font-size:13px; }
   .card .rating-line b{ color:var(--text); font-size:13px; }
