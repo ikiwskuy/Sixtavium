@@ -1,3 +1,4 @@
-# SIXTAVIUM
+# SIXTAVIUM — PAKET FINAL
 
-Versi file terpisah (terbaru): index.html + style.css + script.js — upload ketiganya ke folder/repo yang sama.
+Upload KETIGA file ini (index.html, style.css, script.js) ke repo GitHub, timpa semuanya.
+Versi ini sudah termasuk: detail & nonton fullscreen, judul di atas player, player 860px, logo S hilang, mode EN penuh.
