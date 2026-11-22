@@ -647,6 +647,8 @@
     }
   }
   function showDetail(){
+    overlay.classList.add("is-detail");
+    overlay.classList.remove("is-watch");
     watchView.hidden = true;
     detailView.hidden = false;
     player.pause();
@@ -656,10 +658,11 @@
   function watchTexts(){
     var m = current; if(!m) return;
     document.getElementById("mSyn").textContent = synOf(m);
-    document.getElementById("wTitle").textContent = m.title;
-    document.getElementById("wEp").textContent = m.eps
+    document.getElementById("wTitle").textContent = m.eps ? m.title + " · Episode " + epNum(m, curEp) : m.title;
+    document.getElementById("wSub").textContent = (m.eps
       ? "Episode " + epNum(m, curEp) + " " + L("dari", "of") + " " + epLast(m) + (m.season ? " • Season " + m.season : "") + " • " + durLabel(m.dur)
-      : L("Film", "Movie") + " • " + durLabel(m.dur) + " • " + m.year;
+      : L("Film", "Movie") + " • " + durLabel(m.dur) + " • " + m.year)
+      + " • " + audioLabel(m) + " • " + L("Streaming s.d. ", "Streaming up to ") + QUALITIES[QUALITIES.length - 1].q;
     var prev = document.getElementById("epPrev"), next = document.getElementById("epNext");
     prev.style.visibility = m.eps ? "visible" : "hidden";
     next.style.visibility = m.eps ? "visible" : "hidden";
@@ -680,6 +683,8 @@
   function openWatch(ep, focusDl){
     var m = current; if(!m) return;
     curEp = m.eps ? Math.min(Math.max(ep, 1), m.eps) : 1;
+    overlay.classList.remove("is-detail");
+    overlay.classList.add("is-watch");
     detailView.hidden = true;
     watchView.hidden = false;
     watchTexts();
@@ -700,6 +705,8 @@
   });
   function closeModalFn(){
     overlay.classList.remove("open");
+    overlay.classList.remove("is-detail");
+    overlay.classList.remove("is-watch");
     player.pause(); player.removeAttribute("src"); player.load();
     document.body.style.overflow = "";
     watchView.hidden = true; detailView.hidden = false;
@@ -775,7 +782,6 @@
     document.getElementById("menuBtn").setAttribute("aria-label", "Menu");
     document.querySelector("#menuSaved .menu-saved-lbl").textContent = L("Tersimpan", "Saved");
     /* Item menu Home / Donghua / Anime sama di kedua bahasa */
-    document.querySelector(".avatar").setAttribute("aria-label", L("Profil", "Profile"));
     searchInput.placeholder = L("Cari anime, film, atau serial…", "Search anime, movies, or series…");
     /* Sortir & filter */
     var sortSel = document.getElementById("sortSel");

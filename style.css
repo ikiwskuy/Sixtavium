@@ -62,11 +62,6 @@
   }
   .icon-btn:hover{ background:var(--panel-2); }
   .icon-btn.on{ color:var(--accent); }
-  .avatar{
-    width:38px; height:38px; border-radius:50%; margin-left:6px;
-    background:linear-gradient(140deg,#a678e8,#e58bb8); color:#fff;
-    display:grid; place-items:center; font-weight:800; font-size:15px; border:2px solid rgba(255,255,255,.25);
-  }
   .search-row{ display:none; border-top:1px solid var(--line-soft); }
   .search-row.open{ display:block; }
   .search-row .wrap{ padding-top:12px; padding-bottom:12px; }
@@ -189,6 +184,24 @@
   .overlay{ position:fixed; inset:0; z-index:100; background:rgba(9,6,14,.8); backdrop-filter:blur(6px); display:none; align-items:flex-start; justify-content:center; overflow:auto; padding:22px 14px; }
   .overlay.open{ display:flex; }
   .modal{ position:relative; background:#181124; border:1px solid var(--line); border-radius:20px; width:min(920px,100%); overflow:hidden; animation:pop .18s ease; }
+  /* ---------- Halaman detail & nonton FULLSCREEN: menutupi seluruh viewport ---------- */
+  .overlay.is-detail, .overlay.is-watch{ padding:0; background:#181124; backdrop-filter:none; -webkit-backdrop-filter:none; align-items:stretch; justify-content:stretch; }
+  .overlay.is-detail .modal, .overlay.is-watch .modal{ width:100%; max-width:none; min-height:100vh; min-height:100dvh; border:0; border-radius:0; box-shadow:none; animation:none; overflow:visible; }
+  .overlay.is-detail #detailView .modal-body{ max-width:1080px; margin:0 auto; width:100%; padding:32px 32px 48px; }
+  .overlay.is-detail .m-close, .overlay.is-watch .m-close{ position:fixed; top:16px; right:20px; }
+  /* Halaman nonton: kolom konten lebih lebar dari detail (±1200px), player memenuhi lebar kolom */
+  .overlay.is-watch #watchView{ max-width:1200px; margin:0 auto; width:100%; padding:26px 32px 48px; }
+  .overlay.is-watch #watchView .player{ border-radius:14px; overflow:hidden; }
+  /* Player ukuran sedang: maks ±860px, ter-center; judul/sub di atas & panah di bawahnya ikut selebar player */
+  .overlay.is-watch #watchView .watch-head, .overlay.is-watch #watchView .player, .overlay.is-watch #watchView .watch-bar{ max-width:860px; margin-left:auto; margin-right:auto; }
+  .overlay.is-watch #watchView .watch-bar{ padding-left:0; padding-right:0; }
+  .overlay.is-watch #watchView .watch-body{ padding-left:0; padding-right:0; padding-bottom:0; }
+  @media (max-width:560px){
+    .overlay.is-detail #detailView .modal-body{ padding:20px 18px 34px; }
+    .overlay.is-detail .m-close, .overlay.is-watch .m-close{ top:12px; right:12px; }
+    .overlay.is-watch #watchView{ padding:16px 14px 34px; }
+    .overlay.is-watch #watchView .player{ border-radius:10px; }
+  }
   @keyframes pop{ from{ transform:translateY(10px); opacity:0; } }
   @media (prefers-reduced-motion: reduce){ .modal{ animation:none; } .hero img.bg{ transition:none; } }
   .player{ position:relative; background:#000; aspect-ratio:16/9; }
@@ -196,10 +209,10 @@
   .m-close{ position:absolute; top:12px; right:12px; z-index:30; width:40px; height:40px; border-radius:50%; border:1px solid rgba(255,255,255,.25); background:rgba(13,10,19,.7); color:#fff; font-size:16px; }
   #detailView .m-top{ padding-right:46px; }
   /* ---------- Halaman nonton per episode ---------- */
-  .watch-bar{ display:flex; align-items:center; gap:14px; padding:18px 24px 2px; }
-  .watch-title{ flex:1; min-width:0; text-align:center; }
-  .watch-title h3{ font-family:"Marcellus", Georgia, serif; margin:0; font-size:21px; font-weight:400; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .watch-title p{ margin:3px 0 0; color:var(--muted); font-size:12.5px; font-weight:600; }
+  .watch-head{ padding:0 52px 14px 0; }
+  .watch-head h3{ font-family:"Marcellus", Georgia, serif; margin:0; font-size:22px; font-weight:400; line-height:1.25; }
+  .watch-head p{ margin:5px 0 0; color:var(--muted); font-size:12.5px; font-weight:600; line-height:1.5; }
+  .watch-bar{ display:flex; align-items:center; justify-content:space-between; gap:14px; padding:14px 24px 0; }
   .ep-nav{ flex:none; display:inline-flex; align-items:center; gap:7px; border:1px solid var(--line); background:var(--panel); color:var(--text); border-radius:999px; padding:0 16px; min-height:42px; font-weight:700; font-size:15px; }
   .ep-nav .ep-nav-lbl{ font-size:13.5px; }
   .ep-nav:hover:not(:disabled){ border-color:var(--accent); }
@@ -208,8 +221,9 @@
   .watch-body .dl-box{ margin-top:0; }
   .watch-actions{ margin-top:16px; display:flex; gap:10px; flex-wrap:wrap; }
   @media (max-width:560px){
-    .watch-bar{ padding:14px 16px 0; gap:10px; }
-    .watch-title h3{ font-size:16.5px; }
+    .watch-bar{ padding:12px 16px 0; gap:10px; }
+    .watch-head{ padding-bottom:12px; }
+    .watch-head h3{ font-size:18px; }
     .ep-nav{ padding:0 12px; }
     .ep-nav .ep-nav-lbl{ display:none; }
   }
@@ -298,7 +312,6 @@
     .icon-btn{ width:40px; height:40px; }
     .lang-toggle{ margin-right:2px; padding:2px; }
     .lang-toggle button{ padding:0 8px; min-height:28px; font-size:12px; }
-    .avatar{ display:none; }
     .search-field{ max-width:none; }
     /* Hero HP: tidak terlalu tinggi, teks & tombol enak dibaca/disentuk */
     .hero{ margin-top:14px; min-height:0; border-radius:16px; }

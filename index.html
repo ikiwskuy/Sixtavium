@@ -42,7 +42,6 @@
           <button type="button" data-menu-cat="Anime" role="menuitem">Anime</button>
         </div>
       </div>
-      <div class="avatar" aria-label="Profil">S</div>
     </div>
   </div>
   <div class="search-row" id="searchRow">
@@ -130,15 +129,15 @@
 
     <!-- HALAMAN NONTON: hanya satu episode + download di bawahnya -->
     <div id="watchView" hidden>
+      <div class="watch-head">
+        <h3 id="wTitle"></h3>
+        <p id="wSub"></p>
+      </div>
       <div class="player">
         <video id="player" controls preload="metadata" playsinline></video>
       </div>
       <div class="watch-bar">
         <button class="ep-nav" id="epPrev" type="button" aria-label="Episode sebelumnya">‹<span class="ep-nav-lbl">Sebelumnya</span></button>
-        <div class="watch-title">
-          <h3 id="wTitle"></h3>
-          <p id="wEp"></p>
-        </div>
         <button class="ep-nav" id="epNext" type="button" aria-label="Episode berikutnya"><span class="ep-nav-lbl">Berikutnya</span>›</button>
       </div>
       <div class="modal-body watch-body">
