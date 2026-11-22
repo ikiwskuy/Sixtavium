@@ -1,4 +1,5 @@
-:root{
+
+  :root{
     --bg:#0d0a13;
     --panel:#171221;
     --panel-2:#201830;
@@ -14,9 +15,12 @@
   html{ scroll-behavior:smooth; overflow-x:clip; }
   body{
     margin:0; background:var(--bg); color:var(--text); overflow-x:clip;
+    /* Ruang untuk navbar fixed (64px; 56px di HP) supaya konten tidak tertutup bar */
+    padding-top:64px;
     font-family:"Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
     -webkit-font-smoothing:antialiased;
   }
+  #katalog, #latestEps{ scroll-margin-top:80px; }
   button, [role="button"], select, summary, input:not([type="checkbox"],[type="radio"]){ min-height:2.25rem; }
   button{ font-family:inherit; cursor:pointer; }
   img{ display:block; max-width:100%; }
@@ -26,12 +30,18 @@
 
   /* ---------- Navbar (penempatan ala Crunchyroll, gaya NFTX) ---------- */
   .navbar{
-    position:sticky; top:0; z-index:60;
+    /* z-index di atas overlay (100) supaya nama SIXTAVIUM tetap bisa diklik
+       sebagai tombol Home dari halaman detail / nonton fullscreen.
+       FIXED (bukan sticky) supaya bar atas ini SELALU tampil persis sama di
+       halaman detail maupun nonton, dari posisi scroll mana pun halaman
+       dibuka — tombol ✕ kedua halaman menggantung tepat di bawah bar ini. */
+    position:fixed; top:0; left:0; right:0; z-index:120;
     background:rgba(16,11,24,.92); backdrop-filter:blur(14px);
     border-bottom:1px solid var(--line-soft);
   }
   .navbar-in{ display:flex; align-items:center; gap:26px; height:64px; }
-  .logo{ font-family:"Marcellus", Georgia, serif; font-weight:400; font-size:23px; letter-spacing:.16em; text-decoration:none; white-space:nowrap; }
+  .logo{ font-family:"Marcellus", Georgia, serif; font-weight:400; font-size:23px; letter-spacing:.16em; text-decoration:none; white-space:nowrap; cursor:pointer; transition:opacity .15s ease; }
+  .logo:hover{ opacity:.78; }
   .logo em{ font-style:normal; color:var(--pink); }
   /* ---------- Menu garis tiga (hamburger) ---------- */
   .menu-wrap{ position:relative; }
@@ -148,11 +158,6 @@
   .card .poster{ position:relative; aspect-ratio:2/3; border-radius:12px; overflow:hidden; background:var(--panel-2); border:1px solid var(--line-soft); transition:transform .18s ease, border-color .18s ease; }
   .card:hover .poster{ transform:translateY(-4px); border-color:#5d4780; }
   .card .poster img{ width:100%; height:100%; object-fit:cover; }
-  .card .bm{
-    position:absolute; top:0; right:10px; z-index:3; width:30px; height:40px; border:0;
-    background:none; padding:0; min-height:0; display:grid; justify-items:center;
-  }
-  .card .bm svg{ filter:drop-shadow(0 2px 6px rgba(0,0,0,.5)); }
   .card h3{
     margin:11px 0 3px; font-size:14.5px; font-weight:700; line-height:1.35;
     display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; min-height:2.7em;
@@ -187,19 +192,23 @@
   /* ---------- Halaman detail & nonton FULLSCREEN: menutupi seluruh viewport ---------- */
   .overlay.is-detail, .overlay.is-watch{ padding:0; background:#181124; backdrop-filter:none; -webkit-backdrop-filter:none; align-items:stretch; justify-content:stretch; }
   .overlay.is-detail .modal, .overlay.is-watch .modal{ width:100%; max-width:none; min-height:100vh; min-height:100dvh; border:0; border-radius:0; box-shadow:none; animation:none; overflow:visible; }
-  .overlay.is-detail #detailView .modal-body{ max-width:1080px; margin:0 auto; width:100%; padding:32px 32px 48px; }
-  .overlay.is-detail .m-close, .overlay.is-watch .m-close{ position:fixed; top:16px; right:20px; }
+  /* Padding atas halaman fullscreen memberi ruang bagi navbar (64px) yang kini
+     tetap tampil & bisa diklik di atas overlay */
+  .overlay.is-detail #detailView .modal-body{ max-width:1080px; margin:0 auto; width:100%; padding:calc(64px + 24px) 32px 48px; }
+  /* Tombol ✕ SATU komponen bersama untuk halaman detail & nonton: ukuran,
+     gaya lingkaran, dan posisi fixed kanan atas yang PERSIS sama di keduanya */
+  .overlay.is-detail .m-close, .overlay.is-watch .m-close{ position:fixed; top:calc(64px + 12px); right:20px; }
   /* Halaman nonton: kolom konten lebih lebar dari detail (±1200px), player memenuhi lebar kolom */
-  .overlay.is-watch #watchView{ max-width:1200px; margin:0 auto; width:100%; padding:26px 32px 48px; }
+  .overlay.is-watch #watchView{ max-width:1200px; margin:0 auto; width:100%; padding:calc(64px + 24px) 32px 48px; }
   .overlay.is-watch #watchView .player{ border-radius:14px; overflow:hidden; }
   /* Player ukuran sedang: maks ±860px, ter-center; judul/sub di atas & panah di bawahnya ikut selebar player */
   .overlay.is-watch #watchView .watch-head, .overlay.is-watch #watchView .player, .overlay.is-watch #watchView .watch-bar{ max-width:860px; margin-left:auto; margin-right:auto; }
   .overlay.is-watch #watchView .watch-bar{ padding-left:0; padding-right:0; }
   .overlay.is-watch #watchView .watch-body{ padding-left:0; padding-right:0; padding-bottom:0; }
   @media (max-width:560px){
-    .overlay.is-detail #detailView .modal-body{ padding:20px 18px 34px; }
-    .overlay.is-detail .m-close, .overlay.is-watch .m-close{ top:12px; right:12px; }
-    .overlay.is-watch #watchView{ padding:16px 14px 34px; }
+    .overlay.is-detail #detailView .modal-body{ padding:calc(56px + 16px) 18px 34px; }
+    .overlay.is-detail .m-close, .overlay.is-watch .m-close{ top:calc(56px + 10px); right:12px; }
+    .overlay.is-watch #watchView{ padding:calc(56px + 16px) 14px 34px; }
     .overlay.is-watch #watchView .player{ border-radius:10px; }
   }
   @keyframes pop{ from{ transform:translateY(10px); opacity:0; } }
@@ -246,6 +255,42 @@
   .card .rating-line{ margin:2px 0 0; font-size:12.5px; color:var(--muted); display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
   .card .rating-line .star{ color:var(--pink); font-size:13px; }
   .card .rating-line b{ color:var(--text); font-size:13px; }
+
+  /* ---------- Rilisan episode terbaru (Home): klik langsung ke halaman nonton episode itu ---------- */
+  .lep-head{ margin-top:38px; }
+  .lep-grid{ display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:14px; margin-top:18px; }
+  .lep-card{
+    display:flex; gap:14px; align-items:center; width:100%; text-align:left;
+    background:var(--panel); border:1px solid var(--line-soft); border-radius:14px;
+    padding:12px 14px 12px 12px; color:var(--text); font:inherit;
+    transition:border-color .15s ease, transform .15s ease, background .15s ease;
+  }
+  .lep-card:hover{ border-color:#5d4780; background:var(--panel-2); transform:translateY(-2px); }
+  .lep-card:active{ transform:scale(.985); }
+  .lep-poster{ width:54px; height:81px; border-radius:9px; overflow:hidden; flex:none; background:var(--panel-2); position:relative; }
+  .lep-poster img{ width:100%; height:100%; object-fit:cover; }
+  .lep-poster .artposter{ padding:7px; }
+  .lep-poster .artposter .a-title{ font-size:11px; }
+  .lep-poster .artposter .a-kicker{ display:none; }
+  .lep-poster .artposter .glyph{ font-size:40px; top:2px; right:4px; }
+  .lep-info{ min-width:0; display:flex; flex-direction:column; align-items:flex-start; }
+  .lep-title{ font-size:14.5px; font-weight:700; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .lep-ep{
+    display:inline-flex; align-items:center; gap:6px; margin-top:7px;
+    background:linear-gradient(120deg,#9a68dd,#e07fae); color:#fff;
+    font-size:12.5px; font-weight:800; letter-spacing:.02em;
+    border-radius:999px; padding:4px 12px; line-height:1.35; white-space:nowrap;
+  }
+  .lep-meta{ margin-top:7px; font-size:12px; color:var(--muted); font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%; }
+  .lep-meta .star{ color:var(--pink); }
+  @media (max-width:1200px){ .lep-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); } }
+  @media (max-width:560px){
+    .lep-head{ margin-top:28px; }
+    .lep-grid{ grid-template-columns:minmax(0,1fr); gap:10px; margin-top:14px; }
+    .lep-card{ padding:10px 12px 10px 10px; }
+    .lep-poster{ width:48px; height:72px; }
+    .lep-title{ font-size:14px; }
+  }
   /* ---------- Rating ---------- */
   .rating-bar{ margin-top:18px; border:1px solid var(--line-soft); background:var(--panel); border-radius:14px; padding:16px 18px; display:flex; gap:14px; align-items:center; }
   .rating-bar .rating-label{ font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--muted-2); }
@@ -312,6 +357,8 @@
   }
   /* HP: layout khusus layar kecil */
   @media (max-width:560px){
+    body{ padding-top:56px; }
+    #katalog, #latestEps{ scroll-margin-top:68px; }
     .wrap{ padding:0 16px; }
     /* Navbar ringkas: logo + bahasa + ikon tetap muat sebaris */
     .navbar-in{ gap:8px; height:56px; }
