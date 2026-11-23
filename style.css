@@ -75,12 +75,42 @@
   .search-row{ display:none; border-top:1px solid var(--line-soft); }
   .search-row.open{ display:block; }
   .search-row .wrap{ padding-top:12px; padding-bottom:12px; }
+  .search-box{ position:relative; max-width:560px; }
   .search-field{
     display:flex; align-items:center; gap:10px; background:var(--panel-2);
-    border:1px solid var(--line); border-radius:999px; padding:0 18px; height:46px; max-width:560px;
+    border:1px solid var(--line); border-radius:999px; padding:0 18px; height:46px;
   }
   .search-field input{ flex:1; min-width:0; background:none; border:0; outline:0; color:var(--text); font:500 14.5px "Plus Jakarta Sans",sans-serif; }
   .search-field input::placeholder{ color:var(--muted-2); }
+  .search-clear{
+    flex:none; width:32px; height:32px; min-height:32px; padding:0; border:0; border-radius:50%;
+    background:var(--panel); color:var(--muted); display:grid; place-items:center;
+  }
+  .search-clear:hover{ color:var(--text); }
+  .search-clear[hidden]{ display:none; }
+  /* Dropdown saran pencarian (ala MyAnimeList): muncul tepat di bawah kotak
+     pencarian saat mengetik; lebar mengikuti kotak pencarian, tinggi dibatasi
+     dengan scroll internal supaya aman di HP tanpa scroll menyamping. */
+  .search-suggest{
+    position:absolute; top:calc(100% + 8px); left:0; right:0; z-index:80;
+    background:var(--panel-2); border:1px solid var(--line); border-radius:14px;
+    box-shadow:0 18px 44px rgba(0,0,0,.55); padding:6px;
+    max-height:min(430px, 60vh); overflow-y:auto; overscroll-behavior:contain;
+  }
+  .search-suggest[hidden]{ display:none; }
+  .sg-item{
+    display:flex; align-items:center; gap:12px; width:100%; min-height:64px;
+    padding:7px 8px; border:0; border-radius:10px; background:none; color:var(--text);
+    text-align:left; font-family:inherit;
+  }
+  .sg-item:hover, .sg-item:focus-visible{ background:var(--panel); outline:none; }
+  .sg-thumb{ flex:none; width:42px; height:58px; border-radius:7px; overflow:hidden; background:var(--panel); }
+  .sg-thumb img{ width:100%; height:100%; object-fit:cover; }
+  .sg-main{ flex:1; min-width:0; }
+  .sg-title{ display:block; font-size:14.5px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .sg-meta{ display:block; margin-top:2px; font-size:12.5px; font-weight:500; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .sg-meta .star{ color:var(--pink); }
+  .sg-none{ padding:13px 12px; font-size:13.5px; color:var(--muted); }
 
   /* ---------- Banner trending ---------- */
   .hero{
@@ -213,8 +243,13 @@
   }
   @keyframes pop{ from{ transform:translateY(10px); opacity:0; } }
   @media (prefers-reduced-motion: reduce){ .modal{ animation:none; } .hero img.bg{ transition:none; } }
-  .player{ position:relative; background:#000; aspect-ratio:16/9; }
-  .player video{ width:100%; height:100%; display:block; }
+  .player{ position:relative; background:#000; aspect-ratio:16/9; overflow:hidden; }
+  .player video{ position:absolute; inset:0; width:100%; height:100%; display:block; background:#000; }
+  /* Iframe Bunny mengisi TEPAT seluruh bingkai (absolute inset:0) dan berlatar
+     hitam pekat: dokumen embed Bunny berlatar putih selama pemuatan, jadi tanpa
+     ini muncul pita putih di area iframe yang belum tertutup gambar video. */
+  .player iframe{ position:absolute; inset:0; width:100%; height:100%; display:block; border:0; margin:0; padding:0; background:#000; }
+  .player [hidden]{ display:none !important; }
   .m-close{ position:absolute; top:12px; right:12px; z-index:30; width:40px; height:40px; border-radius:50%; border:1px solid rgba(255,255,255,.25); background:rgba(13,10,19,.7); color:#fff; font-size:16px; }
   #detailView .m-top{ padding-right:46px; }
   /* ---------- Halaman nonton per episode ---------- */
@@ -319,6 +354,14 @@
   .q-btn{ flex:1; min-width:120px; min-height:52px; border-radius:12px; border:1px solid var(--line); background:var(--panel-2); color:var(--text); font-weight:800; font-size:14px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px; padding:8px; }
   .q-btn small{ font-weight:600; color:var(--muted); font-size:11px; }
   .q-btn:hover{ border-color:var(--accent); }
+  a.q-btn{ text-decoration:none; }
+  /* Tombol kualitas yang HIDUP (1080p): penuh warna aksen, jelas bisa diklik */
+  .q-btn.live{ background:linear-gradient(120deg,#9a68dd,#e07fae); border-color:transparent; color:#fff; }
+  .q-btn.live small{ color:rgba(255,255,255,.85); }
+  .q-btn.live:hover{ border-color:transparent; filter:brightness(1.08); }
+  /* Tombol kualitas MATI (belum ada link): redup/abu, tidak bisa diklik */
+  .q-btn.off{ opacity:.42; color:var(--muted); background:var(--panel); cursor:not-allowed; }
+  .q-btn.off:hover{ border-color:var(--line); }
   .eps{ margin-top:20px; }
   .eps h4{ margin:0 0 10px; font-size:14px; font-weight:800; }
   .ep-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:8px; }
